@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 streamlit = "==1.10.0"
+black = "*"
 
 [dev-packages]
 

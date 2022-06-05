@@ -1,35 +1,38 @@
 import re
 import streamlit as st
 import streamlit.components.v1 as components
+import requests
+import json
 
-st.write("# BNCC Classifier")
+st.write("# Classificador BNCC")
 
 message_text = st.text_input("Enter a message for spam evaluation")
 
-def preprocessor(text):
-    # text = re.sub('<[^>]*>', '', text) # Effectively removes HTML markup tags
-    # emoticons = re.findall('(?::|;|=)(?:-)?(?:\)|\(|D|P)', text)
-    # text = re.sub('[\W]+', ' ', text.lower()) + ' '.join(emoticons).replace('-', '')
+
+def predict(text):
+    headers = {
+        "accept": "application/json",
+    }
+
+    params = {
+        "item": text,
+    }
+
     print("Preprocessing...")
-    return text
+    response = requests.get(
+        "https://bncc-classifier.herokuapp.com/api/v1/model/classify/item",
+        params=params,
+        headers=headers,
+    )
 
-# model = joblib.load('spam_classifier.joblib')
+    return response
 
-# def classify_message(model, message):
 
-	# label = model.predict([message])[0]
-	# spam_prob = model.predict_proba([message])
+if message_text != "":
 
-	# return {'label': label, 'spam_probability': spam_prob[0][1]}
+    print("We have a text input...")
+    prediction = st.button("Predict!")
 
-if message_text != '':
-
-	# st.write(result)
-	print("We have a text input...")
-	explain_pred = st.button('Predict!')
-
-	# if explain_pred:
-		# with st.spinner('Classifying...'):
-			# class_names = ['ham', 'spam']
-			# components.html(exp.as_html(), height=800)
-
+    if prediction:
+        response = predict(message_text)
+        st.write(json.loads(response.text))
