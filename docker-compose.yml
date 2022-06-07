@@ -5,7 +5,7 @@ services:
     build:
       context: ./
     image: fastapi_bncc_frontend_web
-    container_name: web
+    container_name: web_front
     volumes:
       - ./:/usr/src/app
     ports:
@@ -13,3 +13,4 @@ services:
     environment:
       - ENVIRONMENT=dev
       - TESTING=0
+      - PORT=8000
